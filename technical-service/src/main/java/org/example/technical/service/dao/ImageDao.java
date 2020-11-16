@@ -14,9 +14,18 @@ public class ImageDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+
     public ImageEntity createImage(ImageEntity imageEntity) {
         entityManager.persist(imageEntity);
         return imageEntity;
     }
 
+    public UserAuthTokenEntity getUserAuthToken(final String accessToken) {
+        try {
+            return entityManager.createNamedQuery("userAuthTokenByAccessToken",
+                    UserAuthTokenEntity.class).setParameter("accessToken", accessToken).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 }
