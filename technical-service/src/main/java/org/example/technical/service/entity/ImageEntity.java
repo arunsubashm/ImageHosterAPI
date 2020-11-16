@@ -26,6 +26,9 @@ STATUS                                   VARCHAR(26)
 
 @Entity
 @Table(name = "IMAGES", schema = "imagehoster")
+@NamedQueries({
+        @NamedQuery(name = "ImageEntityByUuid", query = "select i from ImageEntity i where i.uuid = :uuid")
+})
 public class ImageEntity implements Serializable {
 
     @Id

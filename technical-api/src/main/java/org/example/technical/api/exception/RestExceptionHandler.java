@@ -2,6 +2,7 @@ package org.example.technical.api.exception;
 
 import org.example.technical.api.model.ErrorResponse;
 import org.example.technical.service.exception.AuthenticationFailedException;
+import org.example.technical.service.exception.ImageNotFoundException;
 import org.example.technical.service.exception.UploadFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,13 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> UploadFailedException(UploadFailedException exc, WebRequest request) {
         return new ResponseEntity<ErrorResponse>(
                 new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(ImageNotFoundException.class)
+    public ResponseEntity<ErrorResponse> imagenotfoundException(ImageNotFoundException exc, WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.NOT_FOUND
         );
     }
 }
