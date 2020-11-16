@@ -3,6 +3,7 @@ package org.example.technical.service.business;
 import org.example.technical.service.dao.UserDao;
 import org.example.technical.service.entity.UserAuthTokenEntity;
 import org.example.technical.service.entity.UserEntity;
+import org.example.technical.service.exception.AuthenticationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,11 +20,11 @@ public class AuthenticationService {
     private PasswordCryptographyProvider cryptographyProvider;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserAuthTokenEntity authenticate(final String username, final String password) {
+    public UserAuthTokenEntity authenticate(final String username, final String password) throws AuthenticationFailedException {
         UserEntity userEntity = userDao.getUserByEmail(username);
-//        if(userEntity == null){
-//            throw new AuthenticationFailedException("ATH-001", "User with email not found");
-//        }
+        if(userEntity == null){
+            throw new AuthenticationFailedException("ATH-001", "User with email not found");
+        }
 
         final String encryptedPassword = cryptographyProvider.encrypt(password, userEntity.getSalt());
         if(encryptedPassword.equals(userEntity.getPassword())) {
@@ -44,8 +45,7 @@ public class AuthenticationService {
 
             return userAuthToken;
         } else{
-            //throw new AuthenticationFailedException("ATH-002", "Password Failed");
-            return null;
+            throw new AuthenticationFailedException("ATH-002", "Password Failed");
         }
     }
 

@@ -1,7 +1,6 @@
 package org.example.technical.service.business;
 
 import java.io.UnsupportedEncodingException;
-import java.rmi.UnexpectedException;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Date;
@@ -12,8 +11,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 //import com.sun.org.apache.xml.internal.security.algorithms.Algorithm;
-//import org.example.technical.service.common.UnexpectedException;
-//import org.example.technical.service.common.GenericErrorCode;
+import org.example.technical.service.common.UnexpectedException;
+import org.example.technical.service.common.GenericErrorCode;
 
 
 public class JwtTokenProvider {
@@ -22,7 +21,12 @@ public class JwtTokenProvider {
     private final Algorithm algorithm;
 
     public JwtTokenProvider(final String secret) {
-        algorithm = Algorithm.HMAC512(secret);
+        try {
+            algorithm = Algorithm.HMAC512(secret);
+        }
+        catch (IllegalArgumentException e) {
+            throw new UnexpectedException(GenericErrorCode.GEN_001);
+        }
     }
 
     public String generateToken(final String userUuid, final ZonedDateTime issuedDateTime, final ZonedDateTime expiresDateTime) {

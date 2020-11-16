@@ -5,6 +5,7 @@ import org.example.technical.api.model.AuthorizedUserResponse;
 import org.example.technical.service.business.AuthenticationService;
 import org.example.technical.service.entity.UserAuthTokenEntity;
 import org.example.technical.service.entity.UserEntity;
+import org.example.technical.service.exception.AuthenticationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @RequestMapping(method = RequestMethod.POST, path = "auth/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AuthorizedUserResponse> login(@RequestHeader("authorization")  final String authorization)  {
+    public ResponseEntity<AuthorizedUserResponse> login(@RequestHeader("authorization")  final String authorization) throws AuthenticationFailedException {
 
         byte[] decode = Base64.getDecoder().decode(authorization.split("Basic ")[0]);
         String decodedText = new String(decode);
