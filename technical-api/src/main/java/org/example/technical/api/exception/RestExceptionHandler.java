@@ -1,9 +1,7 @@
 package org.example.technical.api.exception;
 
 import org.example.technical.api.model.ErrorResponse;
-import org.example.technical.service.exception.AuthenticationFailedException;
-import org.example.technical.service.exception.ImageNotFoundException;
-import org.example.technical.service.exception.UploadFailedException;
+import org.example.technical.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,4 +31,19 @@ public class RestExceptionHandler {
                 new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.NOT_FOUND
         );
     }
+
+    @ExceptionHandler(UserNotSignedInException.class)
+    public ResponseEntity<ErrorResponse> usernotsignedinException(UserNotSignedInException exc, WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> UnauthorizedException(UnauthorizedException exc, WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(exc.getCode()).message(exc.getErrorMessage()), HttpStatus.UNAUTHORIZED
+        );
+    }
+
 }
