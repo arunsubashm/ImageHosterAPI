@@ -36,4 +36,16 @@ public class ImageDao {
             return null;
         }
     }
+
+    public ImageEntity getImageById(final long imageId) {
+        try {
+            return entityManager.createNamedQuery("ImageEntityByid", ImageEntity.class).setParameter("id", imageId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public ImageEntity updateImage(final ImageEntity imageEntity) {
+        return entityManager.merge(imageEntity);
+    }
 }
