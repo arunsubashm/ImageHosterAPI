@@ -49,6 +49,7 @@ public class AdminService {
 
         UserEntity userEntity = userAuthToken.getUser();
 
+        // check if he is an Admin User
         if (userEntity.getRole().equals("admin") != true) {
             throw new UnauthorizedException("UE-001", "You are not authorized to get the image details");
         }
